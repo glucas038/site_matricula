@@ -1,0 +1,69 @@
+
+.ui-datatable .ui-datatable-thead,
+th {
+    font-size: 20px; 
+    color: white; 
+    font-weight: bold; 
+
+}
+
+
+.ui-datatable .ui-datatable-tbody,
+ td{
+    font-size: 18px; 
+    color: white; 
+    font-weight: normal; 
+
+}
+
+
+.ui-fieldset {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
+
+.ui-fieldset-legend {
+    font-size: 24px; 
+    font-weight: bold;
+    color: #333;
+    padding: 5px 10px;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 30px;
+    color: white;
+    padding: 5px;
+}
+
+.ui-panelgrid .ui-outputlabel,
+.ui-panelgrid .ui-inputfield,
+.ui-fieldset .ui-outputlabel,
+.ui-fieldset .ui-inputfield {
+    font-size: 18px;
+    color: white;
+}
+
+.grid .value input,
+.grid .value .ui-inputfield {
+	font-size: 18px;
+    width: 95%;
+    text-align: center;
+    height: 36px;
+    padding: 10px;
+
+    box-sizing: border-box; 
+}
+
+.grid .value .ui-selectonemenu {
+    width: 95%;
+    text-align: center;
+    box-sizing: border-box; 
+}
+
+.ui-confirm-dialog .ui-confirmdialog-content {
+    text-align: center;
+}

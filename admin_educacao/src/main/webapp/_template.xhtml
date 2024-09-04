@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title><ui:insert name="title">Default Title</ui:insert></title>
+        <h:outputStylesheet name="css/styles.css" /> 
+        <h:outputScript library="js" name="custom.js" />
+        
+        
+    </h:head>
+    <h:body>
+        <div id="cabecalho">
+            <h:form>
+                <p:menubar hideDelay="1000">
+                    <f:facet name="start">
+                        <h:graphicImage library="img" name="fiesc_logo.png" style="width: 150px; height: auto;" id="logo"/>
+                    </f:facet>
+                    <p:menuitem value="Curso" action="curso?faces-redirect=true" icon="pi pi-fw pi-file" />
+                    <p:menuitem value="Pessoa" action="pessoa?faces-redirect=true" icon="pi pi-fw pi-user" />
+                    <p:menuitem value="Matrícula" action="matricula?faces-redirect=true" icon="pi pi-fw pi-clipboard" />
+                </p:menubar>
+            </h:form>
+        </div>
+
+        <div id="conteudo">
+        	<p:growl id="messages" showDetail="true" sticky="false" />
+            <h1><ui:insert name="titulo">Default Title</ui:insert></h1>
+            <ui:insert name="conteudo"></ui:insert>
+        </div>
+    </h:body>
+</html>

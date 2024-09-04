@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="title">Matrícula</ui:define>
+	<ui:define name="titulo">
+		<h1 class="page-title">MATRÍCULAS</h1>
+	</ui:define>
+	<ui:define name="conteudo">
+
+		<h:form id="formMatricula">
+			<p:growl id="messages" showDetail="true" sticky="false" />
+
+			<p:fieldset legend="Matrícula" toggleable="false">
+				<p:panelGrid columns="2" columnClasses="label,value"
+					styleClass="grid">
+					<p:outputLabel value="Pessoa:" for="pessoa" styleClass="label" />
+					<p:selectOneMenu id="pessoa" value="#{matriculaBean.pessoa.id}"
+						required="true" requiredMessage="Pessoa obrigatória">
+						<f:selectItem itemLabel="Selecione uma pessoa" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{matriculaBean.pessoas}" var="pessoa"
+							itemValue="#{pessoa.id}" itemLabel="#{pessoa.nome}" />
+						<f:ajax event="change" render="messages" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Curso:" for="curso" />
+					<p:selectOneMenu id="curso" value="#{matriculaBean.curso.id}"
+						required="true" requiredMessage="Curso obrigatório">
+						<f:selectItem itemLabel="Selecione um curso" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{matriculaBean.cursos}" var="curso"
+							itemValue="#{curso.id}" itemLabel="#{curso.nome}" />
+						<f:ajax event="change" render="messages" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Data da Matrícula:" for="dtMatricula" />
+					<p:calendar id="dtMatricula" timeZone="America/Sao_Paulo"
+						pattern="dd/MM/yyyy" mask="true"
+						value="#{matriculaBean.matricula.dtMatricula}" required="true"
+						requiredMessage="Data de matricula obrigatório">
+						<f:ajax event="close" render="messages" />
+					</p:calendar>
+
+
+					<h:outputLabel value="" />
+					<p:panelGrid columns="2" columnClasses="label,value"
+						styleClass="grid">
+						<p:commandButton value="Confirmar Matrícula" icon="pi pi-check"
+							update=":formMatricula :formTabelaMatricula:tabelaMatriculas :messages"
+							action="#{matriculaBean.salvar}" styleClass="ui-commandbutton" />
+						<p:commandButton update="@form :messages" process="@this"
+							value="Cancelar" icon="pi pi-times"
+							actionListener="#{matriculaBean.limparEAtualizar}"
+							styleClass="ui-button-danger">
+
+						</p:commandButton>
+					</p:panelGrid>
+
+				</p:panelGrid>
+			</p:fieldset>
+		</h:form>
+
+		<h:form id="formTabelaMatricula">
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no ui-button-danger"
+					icon="pi pi-times" />
+			</p:confirmDialog>
+			<p:fieldset legend="Lista de Matrículas">
+				<p:dataTable var="matricula" id="tabelaMatriculas" paginator="true"
+					paginatorPosition="bottom" rows="10" style="width:100%;"
+					value="#{matriculaBean.matriculas}">
+
+					<p:column headerText="Aluno" sortBy="#{matricula.pessoa.nome}"
+						filterBy="#{matricula.pessoa.nome}" filterMatchMode="contains">
+						<h:outputText value="#{matricula.pessoa.nome}" />
+					</p:column>
+
+					<p:column headerText="Curso" sortBy="#{matricula.curso.nome}"
+						filterBy="#{matricula.curso.nome}" filterMatchMode="contains">
+						<h:outputText value="#{matricula.curso.nome}" />
+					</p:column>
+
+					<p:column headerText="Data de matrícula"
+						sortBy="#{matricula.dtMatricula}">
+						<h:outputText value="#{matricula.dtMatricula}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Editar">
+						<p:commandButton update=":formMatricula" process="@this"
+							value="Editar" icon="pi pi-pencil"
+							actionListener="#{matriculaBean.carregar(matricula)}"
+							oncomplete="navegarParaCima()" />
+					</p:column>
+
+					<p:column headerText="Remover">
+						<p:commandButton update="@form :messages" process="@this"
+							value="Remover" icon="pi pi-times"
+							actionListener="#{matriculaBean.remover(matricula)}"
+							styleClass="ui-button-danger">
+							<p:confirm header="Confirmação"
+								message="Tem certeza que deseja excluir?"
+								icon="pi pi-info-circle" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

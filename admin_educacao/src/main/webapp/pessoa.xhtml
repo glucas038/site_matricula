@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="title">Pessoa</ui:define>
+	<ui:define name="titulo">
+		<h1 class="page-title">PESSOAS</h1>
+	</ui:define>
+	<ui:define name="conteudo">
+
+
+
+		<div class="form-container">
+			<h:form id="formPessoa">
+				<p:fieldset legend="Dados Pessoais" toggleable="false">
+					<p:panelGrid columns="2" columnClasses="label,value"
+						styleClass="grid">
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome" value="#{pessoaBean.pessoa.nome}"
+							required="true" requiredMessage="Nome obrigatório"
+							validatorMessage="Nome não pode ser superior a 50 caracteres"
+							style="text-transform: capitalize;">
+							<f:validateLength maximum="50" />
+							<f:ajax event="blur" render="messages" />
+						</p:inputText>
+
+						<p:outputLabel value="CPF:" for="cpf" />
+						<p:inputMask id="cpf" mask="999.999.999-99"
+							value="#{pessoaBean.pessoa.cpf}" required="true"
+							requiredMessage="CPF obrigatório">
+							<f:ajax event="blur" render="messages" />
+						</p:inputMask>
+
+						<p:outputLabel value="Data de nascimento:" for="dtNascimento" />
+						<p:calendar id="dtNascimento"
+							value="#{pessoaBean.pessoa.dtNascimento}"
+							timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" mask="true"
+							required="true" requiredMessage="Data de nascimento obrigatório">
+							<f:ajax event="close" render="messages" />
+						</p:calendar>
+
+						<h:outputLabel value="" />
+
+						<p:panelGrid columns="2" columnClasses="label,value"
+							styleClass="grid">
+							<p:commandButton value="Cadastrar" action="#{pessoaBean.salvar}"
+								icon="pi pi-check"
+								update=":formPessoa :formTabelaPessoas:tabelaPessoas :messages"
+								styleClass="ui-commandbutton" />
+							<p:commandButton update="@form :messages" process="@this"
+								value="Cancelar" icon="pi pi-times"
+								actionListener="#{pessoaBean.limparEAtualizar}"
+								styleClass="ui-button-danger">
+							</p:commandButton>
+						</p:panelGrid>
+					</p:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</div>
+
+		<h:form id="formTabelaPessoas" style="margin-top: 20px;">
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no ui-button-danger"
+					icon="pi pi-times" />
+			</p:confirmDialog>
+			<p:fieldset legend="Lista de Pessoas">
+				<p:dataTable value="#{pessoaBean.pessoas}" var="pessoa"
+					id="tabelaPessoas" paginator="true" rows="10"
+					paginatorPosition="bottom" style="width:100%;" styleClass="table">
+
+					<p:column headerText="Nome" sortBy="#{pessoa.nome}"
+						filterBy="#{pessoa.nome}" filterMatchMode="contains">
+						<h:outputText value="#{pessoa.nome}" />
+					</p:column>
+
+					<p:column headerText="CPF" sortBy="#{pessoa.cpf}">
+						<h:outputText value="#{pessoa.cpf}" />
+					</p:column>
+
+					<p:column headerText="Data de nascimento"
+						sortBy="#{pessoa.dtNascimento}">
+						<h:outputText value="#{pessoa.dtNascimento}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Editar">
+						<p:commandButton update=":formPessoa" process="@this"
+							value="Editar" actionListener="#{pessoaBean.carregar(pessoa)}"
+							icon="pi pi-pencil" oncomplete="navegarParaCima()" />
+					</p:column>
+
+					<p:column headerText="Remover">
+						<p:commandButton update="@form :messages" process="@this"
+							value="Remover" actionListener="#{pessoaBean.remover(pessoa)}"
+							icon="pi pi-times" styleClass="ui-button-danger">
+							<p:confirm header="Confirmação"
+								message="Tem certeza que deseja excluir?"
+								icon="pi pi-info-circle" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

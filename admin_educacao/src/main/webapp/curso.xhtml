@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="title">Curso</ui:define>
+	<ui:define name="titulo">
+		<h1 class="page-title">CURSOS</h1>
+		
+	</ui:define>
+	<ui:define name="conteudo">
+
+		<div class="form-container">
+			<h:form id="formCurso">
+				<p:fieldset legend="Curso">
+					<p:panelGrid columns="2" columnClasses="label,value"
+						styleClass="grid">
+						<p:outputLabel value="Nome do curso:" for="nome" />
+						<p:inputText id="nome" value="#{cursoBean.curso.nome}"
+							required="true" requiredMessage="Nome obrigatório.">
+							<f:ajax event="blur" render="messages" />
+						</p:inputText>
+
+						<p:outputLabel value="Vagas totais:" for="vagas" />
+						<p:inputNumber id="vagas" value="#{cursoBean.curso.vagasTotais}"
+							minValue="0" decimalPlaces="0" required="true"
+							requiredMessage="Vagas totais obrigatório."
+							validatorMessage="Vagas totais não pode ser menor que #{cursoBean.valorMin}, pois há
+                         alunos matriculados.">
+							<f:validateLongRange minimum="#{cursoBean.valorMin}" />
+							<f:ajax event="blur" render="messages" />
+						</p:inputNumber>
+
+						<p:outputLabel value="Início:" for="inicio" />
+						<p:calendar id="inicio" timeZone="America/Sao_Paulo"
+							pattern="dd/MM/yyyy" mask="true" required="true"
+							requiredMessage="Data de início obrigatório."
+							value="#{cursoBean.curso.dtInicio}">
+							<f:ajax event="close" render="messages" />
+						</p:calendar>
+
+						<p:outputLabel value="Término:" for="termino" />
+						<p:calendar id="termino" timeZone="America/Sao_Paulo"
+							pattern="dd/MM/yyyy" mask="true" required="true"
+							requiredMessage="Data de término obrigatório."
+							value="#{cursoBean.curso.dtTermino}" >
+							<f:ajax event="close" render="messages" />
+						</p:calendar>
+
+						<p:outputLabel value="Idade mínima:" for="idade" />
+						<p:inputNumber id="idade" value="#{cursoBean.curso.idadeMin}"
+							minValue="0" decimalPlaces="0" required="true"
+							requiredMessage="Idade mínima obrigatória.">
+							<f:ajax  event="blur" render="messages" />
+						</p:inputNumber>
+
+						<h:outputLabel value="" />
+						
+							 
+							 <p:panelGrid columns="2" columnClasses="label,value"
+							styleClass="grid">
+							<p:commandButton value="Cadastrar" action="#{cursoBean.salvar}"
+							icon="pi pi-check"
+							update=":formCurso :formTabelaCursos:tabelaCursos :messages"
+							styleClass="ui-commandbutton"
+							 />
+							<p:commandButton update="@form :messages" process="@this"
+								value="Cancelar" icon="pi pi-times"
+								actionListener="#{cursoBean.limparEAtualizar}"
+								styleClass="ui-button-danger">
+							</p:commandButton>
+						</p:panelGrid>
+					</p:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</div>
+
+		<h:form id="formTabelaCursos" style="margin-top: 20px;">
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no ui-button-danger"
+					icon="pi pi-times" />
+			</p:confirmDialog>
+			<p:fieldset legend="Lista de Cursos">
+				<p:dataTable var="curso" id="tabelaCursos" paginator="true"
+					rows="10" style="width:100%;" styleClass="table"
+					value="#{cursoBean.cursos}" paginatorPosition="bottom">
+
+					<p:column headerText="Nome do curso" sortBy="#{curso.nome}"
+						filterBy="#{curso.nome}" filterMatchMode="contains">
+						<h:outputText value="#{curso.nome}" />
+					</p:column>
+
+					<p:column headerText="Vagas" sortBy="#{curso.vagasTotais}">
+						<h:outputText value="#{curso.vagasTotais}" />
+					</p:column>
+
+					<p:column headerText="Início" sortBy="#{curso.dtInicio}">
+						<h:outputText value="#{curso.dtInicio}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Término" sortBy="#{curso.dtTermino}">
+						<h:outputText value="#{curso.dtTermino}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Editar">
+						<p:commandButton update=":formCurso" process="@this"
+							value="Editar" actionListener="#{cursoBean.carregar(curso)}"
+							icon="pi pi-pencil"  oncomplete="navegarParaCima()"/>
+					</p:column>
+
+					<p:column headerText="Remover">
+						<p:commandButton update=":formTabelaCursos:tabelaCursos :messages"
+							process="@this" value="Remover"
+							actionListener="#{cursoBean.remover(curso)}" icon="pi pi-times"
+							styleClass="ui-button-danger">
+							<p:confirm header="Confirmação"
+								message="Tem certeza que deseja excluir?"
+								icon="pi pi-info-circle" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
